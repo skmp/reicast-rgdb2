@@ -21,3 +21,21 @@
 .video-container, .icon-play {
 	cursor: pointer;
 }
+
+.show-details {
+	display: none;
+}
+
+.brief .details, .brief .hide-details {
+	display: none;
+}
+
+.brief .show-details {
+	display: block;
+}
+
+.game h2 {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	margin-top: 2em;
+}

@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   def index
-  	@games = Game.includes(discs: :videos)
+  	@q = Game.search(params[:q])
+  	@games = @q.result.includes(discs: :videos).page params[:page]
   end
 end
