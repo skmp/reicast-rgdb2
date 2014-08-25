@@ -1,0 +1,33 @@
+<h1>Games#index: <%= @games.count %></h1>
+
+<% @games.each do |game| %>
+
+	<h2><%= game.title %></h2>
+	Compatibility: <%= game.compat_summary %>
+	
+	<% if game.compat_known? %>
+	 - <%= game.compat_stability %>, <%= game.compat_playability %>
+	<%end%>
+
+	<% game.discs.group_by { |disc| disc.region + " - v" + disc.version }.each do |k,disc_set| %>
+
+		<h3><%= k %></h3>
+		<% disc_set.group_by(&:seq_num).sort_by { |seq_num| seq_num}.each do |k,disc_seqs| %>
+			<% disc_seqs.each do |disc| %>
+				<div>
+					[<%= disc.fingerprint %>]
+					<div>
+						<% disc.videos.each do |video| %>
+						<div class="video-container" data-yid="<%= video.youtube_id %>">
+							<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= video.youtube_id %>/0.jpg">
+							<%= image_tag("icon_play.png", class: "icon-play") %>
+							</div>
+						<% end %>
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+
+<% end %>
+
