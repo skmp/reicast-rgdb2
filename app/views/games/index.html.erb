@@ -1,4 +1,4 @@
-<h1>Games#index</h1>
+<h1>GameDB</h1>
 
 <%= search_form_for @q do |f| %>
   <%= f.label :title_cont %>
@@ -6,7 +6,7 @@
   <%= f.submit %>
 <% end %>
 
-<h4>Results: <%= @games.count %> <%= paginate @games, window: 200 %></h4>
+<h4>Results: <%= @games.total_count %> <%= paginate @games, window: 200 %></h4>
 
 <% @games.each do |game| %>
 
@@ -20,10 +20,12 @@
 		<%end%>
 		<div class="show-details">
 			<div><a href="#">More details</a></div>
-			<div class="video-container" data-yid="<%= game.discs.first.videos.first.youtube_id %>">
-				<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= game.discs.first.videos.first.youtube_id %>/0.jpg">
-				<%= image_tag("icon_play.png", class: "icon-play") %>
-			</div>
+			<% if game.discs.first && game.discs.first.videos.first %>
+				<div class="video-container" data-yid="<%= game.discs.first.videos.first.youtube_id %>">
+					<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= game.discs.first.videos.first.youtube_id %>/0.jpg">
+					<%= image_tag("icon_play.png", class: "icon-play") %>
+				</div>
+			<% end %>
 		</div>
 		<div class="hide-details"><a href="#">hide details</a></div>
 		<div class="details">
@@ -51,3 +53,4 @@
 
 <% end %>
 
+<h4>Results: <%= @games.total_count %> <%= paginate @games, window: 200 %></h4>
