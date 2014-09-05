@@ -1,9 +1,8 @@
-<div class="container">
-
+<div class="container" style="margin-top: 2em;">
 	<%= search_form_for @q do |f| %>
-	  <%= f.label :title_cont %>
-	  <%= f.search_field :title_cont %>
-	  <%= f.submit %>
+	  <%= f.label :title_cont, "Search by" %>
+	  <%= f.search_field :title_cont, placeholder: "Game name, eg, Dead or alive" %>
+	  <%= f.submit "Find" %>
 	<% end %>
 
 	<h4>Found <%= @games.total_count %> Games<br /><%= paginate @games, window: 200 %></h4>
