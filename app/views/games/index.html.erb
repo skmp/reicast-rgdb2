@@ -1,56 +1,62 @@
-<h1>GameDB</h1>
+<div class="container">
 
-<%= search_form_for @q do |f| %>
-  <%= f.label :title_cont %>
-  <%= f.search_field :title_cont %>
-  <%= f.submit %>
-<% end %>
+	<%= search_form_for @q do |f| %>
+	  <%= f.label :title_cont %>
+	  <%= f.search_field :title_cont %>
+	  <%= f.submit %>
+	<% end %>
 
-<h4>Results: <%= @games.total_count %> <%= paginate @games, window: 200 %></h4>
+	<h4>Found <%= @games.total_count %> Games<br /><%= paginate @games, window: 200 %></h4>
 
-<% @games.each do |game| %>
+	<% @games.each_slice(2) do |slice| %>
+	  <div class="row">
+	    <% slice.each do |game| %>
 
-	<div class="game brief">
-		<h2><%= game.title %></h2>
-		<hr />
-		Compatibility: <%= game.compat_summary %>
-		
-		<% if game.compat_known? %>
-		 - <%= game.compat_stability %>, <%= game.compat_playability %>
-		<%end%>
-		<div class="show-details">
-			<div><a href="#">More details</a></div>
-			<% if game.discs.first && game.discs.first.videos.first %>
-				<div class="video-container" data-yid="<%= game.discs.first.videos.first.youtube_id %>">
-					<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= game.discs.first.videos.first.youtube_id %>/0.jpg">
-					<%= image_tag("icon_play.png", class: "icon-play") %>
-				</div>
-			<% end %>
-		</div>
-		<div class="hide-details"><a href="#">hide details</a></div>
-		<div class="details">
-			<% game.discs.group_by { |disc| disc.region + " - v" + disc.version }.each do |k,disc_set| %>
-
-				<h3><%= k %></h3>
-				<% disc_set.group_by(&:seq_num).sort_by { |seq_num| seq_num}.each do |k,disc_seqs| %>
-					<% disc_seqs.each do |disc| %>
-						<div>
-							[<%= disc.fingerprint %>]
-							<div>
-								<% disc.videos.each do |video| %>
-									<div class="video-container" data-yid="<%= video.youtube_id %>">
-										<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= video.youtube_id %>/0.jpg">
-										<%= image_tag("icon_play.png", class: "icon-play") %>
-									</div>
-								<% end %>
-							</div>
+			<div class="game brief col-lg-6">
+				<h2><%= game.title %></h2>
+				<hr />
+				Compatibility: <%= game.compat_summary %>
+				
+				<% if game.compat_known? %>
+				 - <%= game.compat_stability %>, <%= game.compat_playability %>
+				<%end%>
+				<div class="show-details">
+					<div><a href="#">Expand</a></div>
+					<% if game.discs.first && game.discs.first.videos.first %>
+						<div class="video-container" data-yid="<%= game.discs.first.videos.first.youtube_id %>">
+							<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= game.discs.first.videos.first.youtube_id %>/0.jpg">
+							<%= image_tag("icon_play.png", class: "icon-play") %>
 						</div>
 					<% end %>
-				<% end %>
-			<% end %>
-		</div>
-	</div>
+				</div>
+				<div class="hide-details"><a href="#">Hide details</a></div>
+				<div class="details">
+					<% game.discs.group_by { |disc| disc.region + " - v" + disc.version }.each do |k,disc_set| %>
 
-<% end %>
+						<h3><%= k %></h3>
+						<% disc_set.group_by(&:seq_num).sort_by { |seq_num| seq_num}.each do |k,disc_seqs| %>
+							<% disc_seqs.each do |disc| %>
+								<div>
+									[<%= disc.fingerprint %>]
+									<div>
+										<% disc.videos.each do |video| %>
+											<div class="video-container" data-yid="<%= video.youtube_id %>">
+												<img class="youtube-placeholder" src="http://img.youtube.com/vi/<%= video.youtube_id %>/0.jpg">
+												<%= image_tag("icon_play.png", class: "icon-play") %>
+											</div>
+										<% end %>
+									</div>
+								</div>
+							<% end %>
+						<% end %>
+					<% end %>
+				</div>
+			</div>
 
-<h4>Results: <%= @games.total_count %> <%= paginate @games, window: 200 %></h4>
+		<% end %>
+
+	  </div>
+	<% end %>
+
+	<h4>Found <%= @games.total_count %> Games<br /><%= paginate @games, window: 200 %></h4>
+</div>
